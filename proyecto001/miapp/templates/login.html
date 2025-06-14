@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inicio de Sesión</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url("{% static 'img/fondo-login1.png' %}") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .overlay {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 50px 40px;
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      max-width: 400px;
+      width: 90%;
+      animation: fadeIn 0.6s ease-in-out;
+      box-sizing: border-box;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo img {
+      max-width: 120px;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .logo img:hover {
+      transform: scale(1.05);
+    }
+
+    h2 {
+      text-align: center;
+      color: #0d1b2a;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+      color: #2c3e50;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 25px;
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #888;
+      font-size: 14px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 12px 12px 40px;
+      border: 1.5px solid #ced4da;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: border 0.3s;
+      box-sizing: border-box;
+      background-color: #fff;
+    }
+
+    .input-group input:focus {
+      border-color: #0d6efd;
+      outline: none;
+      box-shadow: 0 0 5px rgba(13,110,253,0.3);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #0d6efd;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+
+    button:hover {
+      background-color: #0b5ed7;
+      transform: translateY(-2px);
+    }
+
+    .error {
+      color: #dc3545;
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    @media screen and (max-width: 480px) {
+      .overlay {
+        padding: 30px 20px;
+      }
+
+      .logo img {
+        max-width: 100px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      button {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h2>Inicio de Sesión</h2>
+    <div class="logo">
+      <img src="{% static 'img/sesion.png' %}" alt="Logo">
+    </div>
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+      <label for="username">Usuario:</label>
+      <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="username" name="username" required>
+      </div>
+
+      <label for="password">Contraseña:</label>
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" name="password" required>
+      </div>
+
+      <button type="submit">Iniciar Sesión</button>
+    </form>
+  </div>
+</body>
+</html>

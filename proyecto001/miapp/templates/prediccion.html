@@ -1,0 +1,319 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Predicción</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to bottom right, #d0e6f6, #f0f8ff); /* Azul claro profesional */
+    margin: 0;
+    padding: 0;
+    background-attachment: fixed;
+}
+
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: rgba(255, 255, 255, 0.95); /* Blanco con leve transparencia */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+        text-align: center;
+        color: #1d3557;
+        margin-bottom: 30px;
+    }
+    
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333; /* Solo color al texto, sin bordes */
+}
+
+    .opciones {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .opciones label {
+        background-color: #f1f3f5;
+        padding: 6px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .opciones input[type="radio"] {
+        margin-right: 6px;
+    }
+
+    .opciones label:hover {
+        background-color: #dee2e6;
+    }
+
+    input[type="number"] {
+        width: 10%;
+        padding: 10px;
+        border: 1.5px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+
+    input.short-input {
+        max-width: 120px; /* Aumentado desde 70px */
+        width: 100%;
+    }
+
+    .fila-inmunoglobulinas {
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+    }
+
+    .fila-inmunoglobulinas .campo {
+        flex: 1;
+    }
+
+    .botones {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .botones button {
+        width: 10px;
+        padding: 10px 0;
+        font-size: 15px;
+        font-weight: bold;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.25s ease;
+        white-space: nowrap;
+        overflow: hidden;          /* Oculta texto que no cabe */
+        text-overflow: ellipsis;   /* Pone puntos suspensivos si no cabe */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+    .botones button:first-child {
+        background-color: #6c757d;
+    }
+
+    .botones button:first-child:hover {
+        background-color: #5a6268;
+    }
+
+    .botones button:last-child {
+        background-color: #28a745;
+    }
+
+    .botones button:last-child:hover {
+        background-color: #218838;
+    }
+    
+    .btn-link {
+        width: 140px;               /* mismo ancho fijo */
+        padding: 10px 0;
+        font-weight: bold;
+        border-radius: 8px;
+        white-space: nowrap;
+        color: white;
+        transition: background-color 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .btn-link.volver {
+        background-color: #007bff;
+    }
+
+    .btn-link.volver:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-link.logout {
+        background-color: #dc3545;
+    }
+
+    .btn-link.logout:hover {
+        background-color: #bd2130;
+    }
+
+    /* Quitar flechitas de input type number en Chrome, Safari, Edge */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Quitar flechitas en Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
+</head>
+<body> 
+    <div class="container">
+        <form method="POST" id="formPrediccion">
+            {% csrf_token %}
+
+            <h2>Formulario de Predicción de Enfermedad Celíaca</h2>
+
+            <label>Edad:</label>
+            <input type="number" name="edad" id="edad" min="0" required>
+
+            <label>Género</label>
+            <div class="opciones">
+                <label><input type="radio" name="genero" value="0" required> Masculino</label>
+                <label><input type="radio" name="genero" value="1"> Femenino</label>
+            </div>
+
+            <label>¿Tiene diabetes?</label>
+            <div class="opciones">
+                <label><input type="radio" name="diabetes" value="0" onclick="controlarTipoDiabetes('0')" required> No</label>
+                <label><input type="radio" name="diabetes" value="1" onclick="controlarTipoDiabetes('1')"> Sí</label>
+            </div>
+
+            <label>Tipo de diabetes:</label>
+            <div class="opciones">
+                <label><input type="radio" name="tipo_diabetes" value="0" disabled checked> Ninguno</label>
+                <label><input type="radio" name="tipo_diabetes" value="1" disabled> Tipo 1</label>
+                <label><input type="radio" name="tipo_diabetes" value="2" disabled> Tipo 2</label>
+            </div>
+
+            <label>¿Presenta antecedente de diabetes?</label>
+            <div class="opciones">
+                <label><input type="radio" name="diarrea" value="0" required> Esteatorrea</label>
+                <label><input type="radio" name="diarrea" value="1"> Acuosa</label>
+                <label><input type="radio" name="diarrea" value="2"> Inflamatoria</label>
+            </div>
+
+            <label>¿Presenta baja estatura según la edad?</label>
+            <div class="opciones">
+                <label><input type="radio" name="baja_estatura" value="0" required> Talla baja proporcionada</label>
+                <label><input type="radio" name="baja_estatura" value="1"> Variante</label>
+                <label><input type="radio" name="baja_estatura" value="2"> Talla baja desproporcionada</label>
+            </div>
+
+            <label>¿Pérdida de peso?</label>
+            <div class="opciones">
+                <label><input type="radio" name="perdida_peso" value="0" required> No</label>
+                <label><input type="radio" name="perdida_peso" value="1"> Sí</label>
+            </div>
+
+            <label>¿Presenta heces pastosas?</label>
+            <div class="opciones">
+                <label><input type="radio" name="heces_pastosas" value="0" required> No</label>
+                <label><input type="radio" name="heces_pastosas" value="1"> Sí</label>
+            </div>
+
+            <div class="fila-inmunoglobulinas">
+                <div class="campo">
+                    <label for="iga">Nivel de Inmunoglobulina tipo A (g/L):</label>
+                    <input type="number" name="iga" id="iga" step="0.01" min="0" class="short-input" required placeholder="">
+                </div>
+                <div class="campo">
+                    <label for="igg">Nivel de Inmunoglobulina tipo G (g/L):</label>
+                    <input type="number" name="igg" id="igg" step="0.01" min="0" class="short-input" required placeholder="">
+                </div>
+                <div class="campo">
+                    <label for="igm">Nivel de Inmunoglobulina tipo M (g/L):</label>
+                    <input type="number" name="igm" id="igm" step="0.01" min="0" class="short-input" required placeholder="">
+                </div>
+            </div>
+
+            <div class="botones">
+                <button type="button" onclick="limpiarFormulario()">Limpiar</button>
+                <button type="submit">Predecir</button>
+            </div>
+
+            <div style="display: flex; gap: 20px; margin-top: 20px; justify-content: center;">
+                <a href="{% url 'registro_paciente' %}" class="btn-link volver">Volver</a>
+                <a href="{% url 'logout' %}" class="btn-link logout">Cerrar sesión</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const inputs = document.querySelectorAll('input[type="number"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.value < 0) {
+                    input.value = '';
+                }
+            });
+        });
+    });
+
+    function limpiarFormulario() {
+        document.getElementById("formPrediccion").reset();
+        controlarTipoDiabetes('0');
+        actualizarRangos();
+    }
+
+    function controlarTipoDiabetes(valor) {
+        let tipo = document.getElementsByName("tipo_diabetes");
+        for (let i = 0; i < tipo.length; i++) {
+            if (valor === "1") {
+                tipo[i].disabled = false;
+                tipo[i].checked = false;
+            } else {
+                tipo[i].disabled = tipo[i].value !== "0";
+                tipo[i].checked = tipo[i].value === "0";
+            }
+        }
+    }
+
+    const edadInput = document.getElementById('edad');
+    const igaInput = document.getElementById('iga');
+    const iggInput = document.getElementById('igg');
+    const igmInput = document.getElementById('igm');
+
+    function actualizarRangos() {
+        const edad = parseInt(edadInput.value);
+        if (!isNaN(edad)) {
+            if (edad < 18) {
+                igaInput.placeholder = "0.01 - 4.00";
+                iggInput.placeholder = "2.00 - 16.00";
+                igmInput.placeholder = "0.20 - 1.90";
+            } else {
+                igaInput.placeholder = "0.70 - 4.00";
+                iggInput.placeholder = "7.00 - 16.00";
+                igmInput.placeholder = "0.40 - 2.30";
+            }
+        } else {
+            igaInput.placeholder = "";
+            iggInput.placeholder = "";
+            igmInput.placeholder = "";
+        }
+    }
+
+    edadInput.addEventListener('input', actualizarRangos);
+    </script>
+</body>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resultado de Predicción - Enfermedad Celíaca</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .contenedor {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .encabezado h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            line-height: 1.3;
+        }
+        .seccion {
+            margin-bottom: 18px;
+            font-size: 16px;
+        }
+        .label {
+            font-weight: 600;
+            color: #555;
+        }
+        .positivo {
+            color: #c0392b;
+            font-weight: bold;
+        }
+        .negativo {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .recomendacion {
+            margin-top: 30px;
+            font-size: 15px;
+            line-height: 1.5;
+            background-color: #eef7f1;
+            border-left: 5px solid #27ae60;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: #2d6a4f;
+        }
+        .grafica-container {
+            margin-top: 40px;
+            text-align: center;
+        }
+        #miGrafica {
+            max-width: 350px;
+            margin: 0 auto 25px;
+        }
+        #resumenResultados {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            font-size: 15px;
+        }
+        .resultado-item {
+            font-weight: 600;
+        }
+        .resultado-item.acierto {
+            color: #27ae60;
+        }
+        .resultado-item.error {
+            color: #c0392b;
+        }
+        .finalizar-form {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .finalizar-form button {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .finalizar-form button:hover {
+            background-color: #1c5980;
+        }
+        .btn-link {
+            display: inline-block;
+            margin: 15px 10px 0;
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+
+        /* EXCLUIR gráfica al imprimir */
+        @media print {
+            .grafica-container {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <div class="encabezado">
+            <h1>Resultado de Predicción de<br>Enfermedad Celíaca</h1>
+        </div>
+
+        <div class="seccion">
+            <span class="label">Paciente:</span> {{ nombre }} {{ apellido }}
+        </div>
+
+        <div class="seccion">
+            <span class="label">Prediccion:</span>
+            {% if resultado == 1 %}
+                <span class="positivo"> Positivo a Enfermedad Celíaca</span>
+            {% else %}
+                <span class="negativo"> Negativo a Enfermedad Celíaca</span>
+            {% endif %}
+        </div>
+
+        <div class="seccion">
+            <span class="label">Probabilidad del resultado:</span> {{ probabilidad }}%
+        </div>
+
+        <div class="recomendacion">
+            <strong>Recomendación:</strong>
+            {% if resultado == 1 %}
+                Dado el resultado positivo, se recomienda acudir a un gastroenterólogo para realizar pruebas adicionales como anticuerpos específicos y una biopsia intestinal. Además, se aconseja no iniciar una dieta libre de gluten hasta tener confirmación médica.
+            {% else %}
+                No se detectan signos fuertes de enfermedad celíaca. Mantenga controles regulares si presenta síntomas digestivos persistentes y siga una dieta equilibrada. Consulte con un especialista ante cualquier duda médica.
+            {% endif %}
+        </div>
+
+        <!-- Sección para la gráfica con Chart.js -->
+        <div class="grafica-container">
+            <h3>Gráfica de Resultados</h3>
+            <canvas id="miGrafica"></canvas>
+
+            <!-- Contenedor para el resumen de resultados -->
+            <div id="resumenResultados">
+                <div class="resultado-item acierto">
+                    <strong>No Tiene Enfermedad Celíaca:</strong> <span id="porcentajeAcierto"></span>
+                </div>
+                <div class="resultado-item error">
+                    <strong>Tiene Enfermedad Celíaca:</strong> <span id="porcentajeError"></span>
+                </div>
+            </div>
+        </div>
+
+        {% if mostrar_finalizar %}
+        <div class="finalizar-form">
+            <form method="POST" action="{% url 'finalizar' %}">
+                {% csrf_token %}
+                <button type="submit">Finalizar</button>
+            </form>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'prediccion' %}" class="btn-link">Volver</a>
+            <a href="{% url 'logout' %}" class="btn-link">Cerrar sesión</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const probabilidad = {{ probabilidad }};
+        const resultado = {{ resultado }};
+
+        const porcentajeError = resultado === 1 ? probabilidad : 100 - probabilidad;
+        const porcentajeAcierto = 100 - porcentajeError;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('porcentajeAcierto').textContent = porcentajeAcierto.toFixed(2) + '%';
+            document.getElementById('porcentajeError').textContent = porcentajeError.toFixed(2) + '%';
+
+            const ctx = document.getElementById('miGrafica').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['No Tiene Enfermedad Celíaca', 'Tiene Enfermedad Celíaca'],
+                    datasets: [{
+                        data: [porcentajeAcierto, porcentajeError],
+                        backgroundColor: ['#27ae60', '#c0392b'],
+                        hoverOffset: 30
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

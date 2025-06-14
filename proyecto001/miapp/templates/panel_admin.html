@@ -1,0 +1,172 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Panel del Administrador</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <style>
+        /* Ocultar scroll vertical pero permitir desplazamiento */
+        html {
+            scrollbar-width: none; /* Firefox */
+        }
+
+        body::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+
+        body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-y: scroll; /* Asegura que se pueda hacer scroll */
+        }
+
+        /* Barra superior */
+        .top-bar {
+            background-color: #0a6996;
+            color: white;
+            padding: 10px 20px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .top-bar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        /* Barra de navegación mejorada */
+        .navbar {
+            background-color: white;
+            padding: 10px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+
+        /* Logo */
+        .navbar a.logo-link {
+            display: flex;
+            align-items: center;
+            margin-right: 40px;
+            flex-shrink: 0;
+        }
+
+        .navbar img {
+            height: 70px;
+            width: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(10,105,150,0.5);
+            transition: transform 0.3s ease;
+        }
+        .navbar a.logo-link:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Lista de enlaces */
+        .navbar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .navbar ul li {
+            display: inline;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: #0a6996;
+            font-weight: 600;
+            font-size: 17px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .navbar ul li a:hover {
+            background-color: #0a6996;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        /* Imagen de portada que ocupa todo el espacio visible restante */
+        .cover-image-container {
+            flex-grow: 1;
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .cover-image-container a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .cover-image-container img {
+            width: 100%;
+            object-fit: cover;
+            flex: 1;
+        }
+
+        /* Barra inferior */
+        .bottom-bar {
+            background-color: #0a6996;
+            color: white;
+            padding: 40px 20px;
+            font-size: 14px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra superior -->
+    <div class="top-bar">
+        <div>
+            <i class="fa fa-envelope"></i> <a href="mailto:CeliacaConsulta@gmail.com">CeliacaConsulta@gmail.com</a>
+            <i class="fa fa-phone"></i> <a href="tel:040-060-0760">040-060-0760</a>
+        </div>
+    </div>
+
+    <!-- Barra de navegación mejorada -->
+    <div class="navbar">
+        <a href="{% url 'panel_admin' %}" class="logo-link">
+            <img src="{% static 'img/logo.png' %}" alt="Logo" />
+        </a>
+        <ul>
+            <li><a href="{% url 'registro_paciente' %}">📝 Registrar Paciente</a></li>
+            <li><a href="{% url 'historial_evaluaciones' %}">📋 Historial</a></li>
+            <li><a href="{% url 'gestion_usuarios' %}">👥 Gestión de Usuarios</a></li>
+            <li><a href="{% url 'logout' %}">🚪 Cerrar Sesión</a></li>
+        </ul>
+    </div>
+
+    <!-- Imagen de portada -->
+    <div class="cover-image-container">
+        <a href="#">
+            <img src="{% static 'img/portada2.png' %}" alt="Imagen de portada" />
+        </a>
+    </div>
+
+    <!-- Barra inferior -->
+    <div class="bottom-bar">
+        &copy; 2025 CeliacaConsulta - Todos los derechos reservados
+    </div>
+
+</body>
+</html>

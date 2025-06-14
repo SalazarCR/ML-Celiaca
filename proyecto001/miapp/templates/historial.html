@@ -1,0 +1,130 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Historial de Evaluaciones</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f2f7ff;
+            padding: 2rem;
+        }
+
+        .contenedor {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 900px;
+            margin: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #09386d;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-exportar {
+            background-color: green;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 5px;
+            margin-top: 1rem;
+            cursor: pointer;
+        }
+
+        .filtros {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            justify-content: flex-start;
+        }
+
+        .filtros input, .filtros select {
+            padding: 0.5rem;
+        }
+
+        .mensaje-vacio {
+            text-align: center;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h2>Historial de Evaluaciones</h2>
+
+        <form method="get" class="filtros">
+            <input type="text" name="nombre" placeholder="Filtrar por nombre" value="{{ filtro_nombre }}">
+            <select name="resultado">
+                <option value="">Todos</option>
+                <option value="positivo" {% if filtro_resultado == 'positivo' %}selected{% endif %}>Positivos</option>
+                <option value="negativo" {% if filtro_resultado == 'negativo' %}selected{% endif %}>Negativos</option>
+            </select>
+            <button type="submit">Aplicar Filtros</button>
+        </form>
+
+        <form method="post" action="{% url 'exportar_excel' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn-exportar">📥 Exportar a Excel</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Resultado</th>
+                    <th>Probabilidad (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if historial %}
+                    {% for e in historial %}
+                        <tr>
+                            <td>{{ e.fecha }}</td>
+                            <td>{{ e.nombre }}</td>
+                            <td>{{ e.apellidos }}</td>
+                            <td>{{ e.resultado }}</td>
+                            <td>{{ e.probabilidad }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="mensaje-vacio">No hay registros disponibles</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+            <div class="enlaces-secundarios">
+                <a href="{% url 'panel_admin' %}">Volver al panel</a>
+
+            </div>
+
+        </table>
+    </div>
+</body>
+</html>
+

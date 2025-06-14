@@ -1,0 +1,131 @@
+{% load static %}
+<!-- templates/gestion_usuarios.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Usuarios</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f7fa; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { color: #003366; }
+        form { margin-bottom: 20px; }
+        input[type="text"], input[type="email"], input[type="password"] {
+            padding: 8px; width: 100%; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc;
+        }
+        button { padding: 8px 12px; border: none; border-radius: 6px; background:rgb(24, 103, 182); color: white; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #eaeaea; }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            padding: 8px;
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box; /* para que padding no sume al ancho */
+        }
+
+        /* Inputs dentro de la tabla */
+        table input[type="text"],
+        table input[type="email"] {
+            width: 90%;              /* ancho menor para no desbordar */
+            padding: 4px 6px;        /* menos padding para compactar */
+            margin: 0;               /* quitar margen para evitar espacio extra */
+            box-sizing: border-box;  /* control de tamaño */
+            font-size: 14px;         /* un poco más pequeño que el input principal */
+        }
+
+        /* Botones dentro de tabla */
+        table button {
+            padding: 6px 10px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            background-color:rgb(67, 153, 238);
+            color: white;
+            border: none;
+            transition: background-color 0.25s ease;
+        }
+
+        table tr:first-child {
+            background-color: #eaeaea; /* color gris claro */
+        }
+
+            table tr:first-child th {
+            color: inherit;
+        }
+        table button:hover {
+            background-color:rgb(177, 208, 241);
+        }
+
+        .enlaces-secundarios {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .enlaces-secundarios a {
+            color:rgb(247, 242, 242);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .enlaces-secundarios a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Crear nuevo usuario - Personal médico autorizado</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="crear">
+            <input type="text" name="username" placeholder="Nombre de usuario" required>
+            <input type="email" name="email" placeholder="Correo electrónico" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Crear médico</button>
+        </form>
+
+        <h2>Lista de usuarios - Personal médico autorizado</h2>
+        <table>
+            <tr>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+            {% for medico in medicos %}
+            <tr>
+                <form method="POST">
+                    {% csrf_token %}
+                    <td><input type="text" name="username" value="{{ medico.username }}"></td>
+                    <td><input type="email" name="email" value="{{ medico.email }}"></td>
+                    <td>
+                        <input type="hidden" name="editar">
+                        <input type="hidden" name="user_id" value="{{ medico.id }}">
+                        <button type="submit">Guardar</button>
+                    </td>
+                </form>
+                <form method="POST">
+                    {% csrf_token %}
+                    <td>
+                        <input type="hidden" name="eliminar">
+                        <input type="hidden" name="user_id" value="{{ medico.id }}">
+                        <button type="submit">Eliminar</button>
+                    </td>
+                </form>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="enlaces-secundarios">
+            <a href="{% url 'panel_admin' %}">Volver al panel</a>
+
+        </div>
+
+</body>
+</html>

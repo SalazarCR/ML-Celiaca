@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Paciente</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-image: url("{% static 'img/fondo_clinico.png' %}"); /* Fondo personalizado */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95); /* fondo blanco translúcido */
+            padding: 40px 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0077b6;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            text-align: center;
+            color: #023e8a;
+            margin-bottom: 30px;
+        }
+
+        .campo {
+            margin-bottom: 20px;
+        }
+
+        .campo label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .campo input {
+            width: 100%;
+            padding: 10px;
+            border: 1.5px solid #ced4da;
+            border-radius: 10px;
+            background-color: #fdfdfd;
+            font-size: 14px;
+        }
+
+        .botones {
+            text-align: center;
+        }
+
+        button {
+            width: 60%;
+            padding: 12px;
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #084cdf;
+        }
+
+        .button.secondary {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #adb5bd;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .button.secondary:hover {
+            background-color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Predicción de Enfermedad Celíaca</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <h3>Registrar Paciente</h3>
+
+            <div class="campo">
+                <label>Apellido Paterno:</label>
+                <input type="text" name="apellido_paterno" required>
+            </div>
+
+            <div class="campo">
+                <label>Apellido Materno:</label>
+                <input type="text" name="apellido_materno" required>
+            </div>
+
+            <div class="campo">
+                <label>Nombre:</label>
+                <input type="text" name="nombre" required>
+            </div>
+
+            <div class="campo">
+                <label>Correo Electrónico:</label>
+                <input type="email" name="correo" required>
+            </div>
+
+            <div class="botones">
+                <button type="submit">Realizar Predicción</button>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                {% if user.groups.all.0.name == "Administrador" %}
+                    <a href="{% url 'panel_admin' %}" class="button secondary">Volver al panel</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="button secondary">Volver</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
