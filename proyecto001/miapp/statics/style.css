@@ -1,0 +1,224 @@
+/* Fondo y fuente general */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #e0ecf8, #f4f6f9);
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 600px;
+    margin: 40px auto;
+    background: white;
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1, h2, h3 {
+    color: #1d3557;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+label {
+    font-weight: 600;
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 6px;
+    color: #2c3e50;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid #ced4da;
+    border-radius: 10px;
+    font-size: 14px;
+    background-color: #fdfdfd;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+    outline: none;
+}
+
+.short-input {
+    width: 100px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.opciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+.opciones label {
+    background-color: #f1f3f5;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.opciones input[type="radio"] {
+    margin-right: 6px;
+}
+
+.opciones label:hover {
+    background-color: #dee2e6;
+}
+
+.botones {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    gap: 10px;
+}
+
+button {
+    flex: 1;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: bold;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #084cdf;
+    transform: translateY(-1px);
+}
+
+
+
+button.secondary {
+    background-color: #0088ff;
+    color: white;
+    margin-top: 20px;
+}
+
+button.secondary:hover {
+    background-color: #5a6268;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 30px 20px;
+    }
+
+    .botones {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+
+.btn-link {
+    display: inline-block;
+    background-color: #0d6efd;
+    color: white;
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.25s ease, transform 0.2s ease;
+}
+
+.btn-link:hover {
+    background-color: #084cdf;
+    transform: translateY(-1px);
+}
+.enlaces-secundarios {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.enlaces-secundarios a {
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    background-color: #0d6efd;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.enlaces-secundarios a:hover {
+    background-color: #084cdf;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 30px 20px;
+    }
+
+    .botones {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    .enlaces-secundarios {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .enlaces-secundarios a {
+        display: block;
+        text-align: center;
+    }
+}
+
+.button, a.button {
+    flex: 1;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: bold;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.2s ease;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+}
+
+a.button.secondary {
+    background-color: #6c757d;
+}
+
+a.button.secondary:hover {
+    background-color: #5a6268;
+}
+
