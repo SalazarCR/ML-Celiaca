@@ -11,6 +11,5 @@ class Evaluacion(models.Model):
     probabilidad = models.FloatField()
     fecha = models.DateTimeField(auto_now_add=True)
 
-
     def __str__(self):
         return f"{self.nombre} {self.apellidos} - {self.resultado}"

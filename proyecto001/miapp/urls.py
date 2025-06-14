@@ -15,10 +15,6 @@ urlpatterns = [
     path('usuarios/', views.gestion_usuarios, name='gestion_usuarios'),
     path('historial/', views.historial_evaluaciones, name='historial_evaluaciones'),
     path('exportar_excel/', views.exportar_excel, name='exportar_excel'),
-
-
-
-
 ]
 
 
